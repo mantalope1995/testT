@@ -80,12 +80,15 @@ export const validateSession = async (request: NextRequest) => {
 
     const protectedRoutes = ['/dashboard', '/invitation'];
 
-    if (
-      !user &&
-      protectedRoutes.some((path) => request.nextUrl.pathname.startsWith(path))
-    ) {
-      // redirect to /auth
-      return forceLoginWithReturn(request);
+    if (!user) {
+      if (protectedRoutes.some((path) => request.nextUrl.pathname.startsWith(path)) || request.nextUrl.pathname === '/') {
+        return forceLoginWithReturn(request);
+      }
+    } else {
+      // If the user is authenticated, redirect them from /auth or / to /dashboard
+      if (request.nextUrl.pathname.startsWith('/auth') || request.nextUrl.pathname === '/') {
+        return NextResponse.redirect(new URL('/dashboard', request.url));
+      }
     }
 
     return response;

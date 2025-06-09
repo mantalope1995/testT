@@ -225,7 +225,7 @@ npm run dev
 
 ```bash
 cd backend
-poetry run python3.11 api.py
+poetry run python api.py
 ```
 
 4. Start the worker (in one more terminal):
